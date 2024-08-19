@@ -1,46 +1,47 @@
 package com.example.springweb.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.bind.DefaultValue;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RequestMapping("/hello")
+@Controller
+@RequestMapping()
 public class HelloController {
+  private final HelloService helloService;
 
-//  @GetMapping("/hello")
-////  @RequestMapping(value = "/hello", method = RequestMethod.GET)
-//  public String printHello() {
-//    return "Hello Spring MVC Framework";
-//  }
-//
-//  @GetMapping({"/", "/world"})
-////  @RequestMapping(path = {"/", "/world"}, method = RequestMethod.GET)
-//  public String printHelloWorld() {
-//    return "Hello World";
-//  }
+  public HelloController(@Autowired HelloService helloService) {
+      this.helloService = helloService;
+  }
+
+  @GetMapping()
+  public String hello() {
+    return "simpleWelcome";
+  }
+
+  @GetMapping("/simpleWelcome")
+  public String simpleWelcome() {
+    return "simpleWelcome";
+  }
+
+  @GetMapping("/hello")
+  public String getWelcome(Model model) {
+    model.addAttribute("welcomeMsg", "Hello from dynamic Thymeleaf example!");
+    return "welcome";
+  }
 
   @GetMapping({"/times", "/times/{numberOfTimes}"})
   public String getHello(
       @RequestParam(value = "type", required = false) String helloType,
-      @PathVariable(required = false) Integer numberOfTimes) {
-
-    StringBuilder stringBuilder = new StringBuilder();
-    if (numberOfTimes == null) {
-      numberOfTimes = 1;
-    }
-
-    for (int i = 0; i < numberOfTimes; i++) {
-      if ("world".equalsIgnoreCase(helloType)) {
-        stringBuilder.append("Hello World ");
-      } else if ("spring".equalsIgnoreCase(helloType)) {
-        stringBuilder.append("Hello Spring MVC Framework ");
-      }
-    }
-    return stringBuilder.toString();
+      @PathVariable(required = false) Integer numberOfTimes,
+      Model model) {
+    model.addAttribute("helloMessage", helloService.hello(helloType, numberOfTimes));
+    return "hello";
   }
 
 }
