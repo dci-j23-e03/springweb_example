@@ -1,4 +1,4 @@
-package com.example.springweb.controller;
+package com.example.springweb.service;
 
 import org.springframework.stereotype.Service;
 
