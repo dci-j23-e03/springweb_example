@@ -10,10 +10,12 @@
       <tr>
         <td><label>Name:</label></td>
         <td><input th:field="*{name}" type="text"></td>
+        <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</td>
       </tr>
       <tr>
         <td><label>Age:</label></td>
         <td><input th:field="*{age}" type="number"></td>
+        <td th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age Error</td>
       </tr>
       <tr>
         <td><input type="submit" value="Submit"></td>
